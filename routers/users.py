@@ -23,9 +23,10 @@ async def login():
     ...
 
 
-@router.get('/user-profile')
-async def get_user_profile():
-    ...
+@router.get('/{username}')
+async def get_user_profile(db_session: Annotated[AsyncSession, Depends(get_db)], username: str):
+    user_profile = await UsersOperation(db_session=db_session).get_user_by_username(username=username)
+    return user_profile
 
 
 @router.put('/update-profile')
