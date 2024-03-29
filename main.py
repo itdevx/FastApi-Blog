@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from routers.users import router as user_router
+from routers.posts import router as post_router
 from db.engine import Base, engine
 
 app = FastAPI()
@@ -12,3 +13,4 @@ async def init_tables():
 
 
 app.include_router(user_router, prefix='/users')
+app.include_router(post_router, prefix='/article')

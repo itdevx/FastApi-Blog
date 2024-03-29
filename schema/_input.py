@@ -14,3 +14,10 @@ class UpdateUserProfileInput(BaseModel):
 class DeleteUserAccountInput(BaseModel):
     username: str
     password: str
+
+
+class Article(BaseModel):
+    title: str
+    content: str
+    status: bool
+    

@@ -77,3 +77,4 @@ class UsersOperation:
         if not password_manager.verify(password, user.password):
             raise exceptions.UsernameOrPasswordIncorrect
         return 'YES'
+    
