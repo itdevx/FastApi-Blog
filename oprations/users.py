@@ -9,7 +9,7 @@ from fastapi import HTTPException, status
 from utils.secrets import password_manager
 from schema.output import RegisterOutput
 from sqlalchemy.exc import IntegrityError
-from exceptions import UserAlreadyExists
+import exceptions
 
 
 
@@ -30,7 +30,7 @@ class UsersOperation:
                 session.add(user)
                 await session.commit()
             except IntegrityError:
-                raise UserAlreadyExists
+                raise exceptions.UserAlreadyExists
 
         # return RegisterOutput(username=user.username, id=user.id)
         return RegisterOutput(**user.__dict__)
@@ -65,3 +65,15 @@ class UsersOperation:
         async with self.db_session as session:
             await session.execute(delete_query)
             await session.commit()
+
+    
+    async def login(self, username: str, password: str):
+        query = sq.select(User).where(User.username==username)
+        async with self.db_session as session:
+            user = await session.scalar(query)
+            if user is None:
+                raise exceptions.UsernameOrPasswordIncorrect
+        
+        if not password_manager.verify(password, user.password):
+            raise exceptions.UsernameOrPasswordIncorrect
+        return 'YES'
