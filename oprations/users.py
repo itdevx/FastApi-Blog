@@ -16,7 +16,6 @@ import exceptions
 class UsersOperation:
     def __init__(self, db_session:AsyncSession) -> None:
         self.db_session = db_session
-
     
     async def create(self, username:str, password:str) -> User:
         user_pwd = password_manager.hash(password)
